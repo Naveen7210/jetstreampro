@@ -30,5 +30,7 @@ Route::middleware([
 }); 
 
 Route::resource('/houseowner', UsertypeController::class);
-
+    
 Route::resource('/guestroom', GuestroomsController::class);
+
+Route::get('/rentalrooms', [GuestroomsController::class, 'viewrentalroom']);

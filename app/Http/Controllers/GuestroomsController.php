@@ -48,9 +48,8 @@ class GuestroomsController extends Controller
 
         $photoid = guestrooms::orderBy('id','DESC')->pluck('id')->first();
         $photosid = $photoid +  1;
-
         foreach ($request->file('photos') as $photo) {
-            $filename = $photo->getClientOriginalName();
+            $filename = time().$photo->getClientOriginalName();
             $path = $photo->storeAs('images', $filename, 'public');
             $requestData["photos"] = '/storage/' . $path;
             roomphotos::create([
@@ -81,7 +80,8 @@ class GuestroomsController extends Controller
     public function show(Request $request, string $id)
     {
         $guestroomview = guestrooms::find($id);
-        return view('guestroom.viewguestroom')->with('guestroomview', $guestroomview);
+        $roomphotos = roomphotos::get();
+        return view('guestroom.viewguestroom')->with('guestroomview', $guestroomview)->with('roomphotos', $roomphotos);
     }
 
     /**
@@ -90,7 +90,8 @@ class GuestroomsController extends Controller
     public function edit(string $id)
     {
         $editguestrooms = guestrooms::find($id);
-        return view('guestroom.editguestroom')->with('editguestrooms', $editguestrooms);
+        $roomphotos = roomphotos::where('user_id','=',$editguestrooms->id)->get();
+        return view('guestroom.editguestroom')->with('editguestrooms', $editguestrooms)->with('roomphotos', $roomphotos);
     }
 
     /**
@@ -98,7 +99,7 @@ class GuestroomsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
+        
         $guestroom = guestrooms::find($id);
         $input = $request->all();
         $guestroom->update($input);
@@ -109,9 +110,16 @@ class GuestroomsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         guestrooms::destroy($id);
         return redirect('/guestroom');
     }
+
+    public function viewrentalroom(){
+
+        $rentalrooms = guestrooms::get();
+        return view('guestroom.guestroom')->with('rentalrooms',$rentalrooms);
+    }
+
 }
