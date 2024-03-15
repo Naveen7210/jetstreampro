@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\guestrooms;
 use App\Models\User;
 use App\Models\roomphotos;
+use Hamcrest\Core\HasToString;
 use Illuminate\Http\Request;
 
 class GuestroomsController extends Controller
@@ -46,14 +47,14 @@ class GuestroomsController extends Controller
             'rentperday' => ['required'],
         ]);
 
-        $photoid = guestrooms::orderBy('id','DESC')->pluck('id')->first();
+        $photoid = guestrooms::orderBy('id', 'DESC')->pluck('id')->first();
         $photosid = $photoid +  1;
         foreach ($request->file('photos') as $photo) {
-            $filename = time().$photo->getClientOriginalName();
+            $filename = time() . $photo->getClientOriginalName();
             $path = $photo->storeAs('images', $filename, 'public');
             $requestData["photos"] = '/storage/' . $path;
             roomphotos::create([
-                'photos'=> $requestData["photos"],
+                'photos' => $requestData["photos"],
                 'user_id' => $photosid,
             ]);
         }
@@ -69,7 +70,7 @@ class GuestroomsController extends Controller
             'minperiod' => $request['minperiod'],
             'maxperiod' => $request['maxperiod'],
             'rentperday' => $request['rentperday'],
-            'photos'=> $photosid,
+            'photos' => $photosid,
         ]);
         return redirect('/guestroom');
     }
@@ -90,7 +91,7 @@ class GuestroomsController extends Controller
     public function edit(string $id)
     {
         $editguestrooms = guestrooms::find($id);
-        $roomphotos = roomphotos::where('user_id','=',$editguestrooms->id)->get();
+        $roomphotos = roomphotos::where('user_id', '=', $editguestrooms->id)->get();
         return view('guestroom.editguestroom')->with('editguestrooms', $editguestrooms)->with('roomphotos', $roomphotos);
     }
 
@@ -99,7 +100,7 @@ class GuestroomsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
+
         $guestroom = guestrooms::find($id);
         $input = $request->all();
         $guestroom->update($input);
@@ -116,11 +117,50 @@ class GuestroomsController extends Controller
         return redirect('/guestroom');
     }
 
-    public function viewrentalroom(){
+    public function viewrentalroom()
+    {
 
         $rentalrooms = guestrooms::get();
-        $roomphotos = roomphotos::get();
-        return view('rental-room.rental-room')->with('rentalrooms',$rentalrooms)->with('roomphotos', $roomphotos);;
-    }
+        $roomphotoss = roomphotos::get();
+        $rentalroomid = guestrooms::pluck('id');
+        $userids = roomphotos::pluck('user_id');
+        $photos = roomphotos::pluck('photos');
+        
+        $firstids = array();
+        $j = 0;
+        for ($i = 0; $i < count($rentalroomid); $i++) {
+            for ($k = 0; $k < count($userids); $k++) {
+                if ($rentalroomid[$i] == $userids[$k]) {
+                    if (!(in_array($userids[$k], $firstids))) {
+                        $firstids[] = $userids[$k];
+                    }
+                }
+            }
+            $j++;
+        }
 
+        $photorec = [];
+        $l = 0;
+        for ($i = 0; $i < count($firstids); $i++) {
+            for ($j = 0; $j < count($roomphotoss); $j++) {
+                if ($firstids[$i] == $roomphotoss[$j]->user_id) {
+                    $photorec[$l] = $roomphotoss[$j];
+                }
+            }
+            $l++;
+        }
+
+        $rooms = [];
+        $o = 0;
+        for ($i = 0; $i < count($rentalrooms); $i++) {
+            for ($j = 0; $j < count($firstids); $j++) {
+                if ($firstids[$j] == $rentalrooms[$i]->id) {
+                    $rooms[] = $rentalrooms[$i];
+                }
+            }
+            $o++;
+        }
+
+        return view('rental-room.rental-room')->with('rooms', $rooms)->with('photorec', $photorec);;
+    }
 }

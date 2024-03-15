@@ -30,7 +30,7 @@
         width: 30%;
     }
 
-    .mainimg{
+    .mainimg {
         width: 100%;
         position: relative;
     }
@@ -53,8 +53,8 @@
 
     .contentflex2div {
         width: 30%;
+        padding: 2% 0 0 0;
         background-color: white;
-        box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
     }
 
     .flex1divcontent {
@@ -110,6 +110,44 @@
         font-size: 22px;
         text-align: center;
     }
+
+    .buttondiv {
+        display: flex;
+        height: 7vh;
+        background-color: white;
+        box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+        padding: 5% 5% 5% 13%;
+    }
+
+    .buttondiv1 {
+        display: flex;
+        height: 7vh;
+        margin: 10% 0 0 0;
+        justify-content: center;
+        background-color: white;
+        box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+        padding: 7% 0 0 0;
+    }
+
+    .amount {
+        font-size: 22px;
+        font-weight: 800;
+        padding: 0 0 0 10%;
+    }
+
+    .amounttype {
+        font-size: 14px;
+        padding: 1.5% 0 0 0;
+    }
+
+    .rupeeimg {
+        padding: 0 0 0 0;
+    }
+
+    .viewdiv{
+        font-size: 20px;
+        font-weight: 800;
+    }
 </style>
 <x-app-layout>
     <x-slot name="header">
@@ -126,16 +164,16 @@
 
                     </div>
                     <div class="rentalroomviews">
-                        @foreach($rentalrooms as $rentalrom)
-                        @foreach($roomphotos as $roomphot)
-                        @if($rentalrom->id == $roomphot->user_id && auth()->user()->mobileno == $rentalrom->mobileno)
+                        @foreach($rooms as $rooms)                        
+                        @foreach($photorec as $photoc)
+                        @if($rooms->id == $photoc->user_id)
                         <div class="grouprentalroom sm:rounded-lg">
                             <div class="imagediv">
                                 <div class="mainimg">
-                                    <img src="{{$roomphot->photos}}" class="imageviews">
+                                    <img src="{{$photoc->photos}}" class="imageviews">
                                 </div>
                                 <div class="name">
-                                    <h3 class="houename">{{$rentalrom->address}}</h3>
+                                    <h3 class="houename">{{$rooms->address}}</h3>
                                 </div>
                             </div>
                             <div class="contentdiv">
@@ -155,7 +193,7 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname">Living Room</h4>
-                                                <h4 class="contentcount">{{$rentalrom->roomcount}}</h4>
+                                                <h4 class="contentcount">{{$rooms->roomcount}}</h4>
                                             </div>
                                         </div>
                                         <div class="fleximgcontent">
@@ -164,7 +202,7 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname">Bed Room</h4>
-                                                <h4 class="contentcount">{{$rentalrom->roomcount}}</h4>
+                                                <h4 class="contentcount">{{$rooms->roomcount}}</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -175,7 +213,7 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname">Bath Room</h4>
-                                                <h4 class="contentcount">{{$rentalrom->roomcount}}</h4>
+                                                <h4 class="contentcount">{{$rooms->roomcount}}</h4>
                                             </div>
                                         </div>
                                         <div class="fleximgcontent">
@@ -184,7 +222,7 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname">Minimum Day</h4>
-                                                <h4 class="contentcount">{{$rentalrom->minperiod}}</h4>
+                                                <h4 class="contentcount">{{$rooms->minperiod}}</h4>
                                             </div>
                                         </div>
                                         <div class="fleximgcontent">
@@ -193,14 +231,21 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname">Maximum Day</h4>
-                                                <h4 class="contentcount">{{$rentalrom->maxperiod}}</h4>
+                                                <h4 class="contentcount">{{$rooms->maxperiod}}</h4>
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
-                                <div class="contentflex2div sm:rounded-lg">
-                                    
+                                <div class="contentflex2div">
+                                    <div class="buttondiv sm:rounded-lg">
+                                        <img src="{{url('/storage/customimages/rupee.png')}}" class="rupeeimg">
+                                        <a class="amount">{{$rooms->rentperday}}/</a>
+                                        <a class="amounttype">Per Day</a>
+                                    </div>
+                                    <div class="buttondiv1 sm:rounded-lg">
+                                        <h3 class="viewdiv">View Details</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
