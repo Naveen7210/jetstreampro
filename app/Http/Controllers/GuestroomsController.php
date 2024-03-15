@@ -119,7 +119,8 @@ class GuestroomsController extends Controller
     public function viewrentalroom(){
 
         $rentalrooms = guestrooms::get();
-        return view('guestroom.guestroom')->with('rentalrooms',$rentalrooms);
+        $roomphotos = roomphotos::get();
+        return view('rental-room.rental-room')->with('rentalrooms',$rentalrooms)->with('roomphotos', $roomphotos);;
     }
 
 }
