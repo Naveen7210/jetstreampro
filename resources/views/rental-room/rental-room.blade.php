@@ -149,14 +149,14 @@
         font-weight: 800;
     }
 </style>
-<x-app-layout>
+<x-guestroom-layout>
     <x-slot name="header">
         <x-nav-link>
             {{ __('Rental Rooms') }}
         </x-nav-link>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12" onload="functions()">
         <div class=" mx-auto sm:px-6 lg:px-4">
             <div class="overflow-hidden ">
                 <div class="rentalroommaindiv">
@@ -230,7 +230,7 @@
                                                 <img src="{{url('/storage/customimages/sortinc.png')}}" class="imageicon">
                                             </div>
                                             <div class="contentgrid">
-                                                <h4 class="contentname">Maximum Day</h4>
+                                                <h4 class="contentname" id="maxday">Maximum Day</h4>
                                                 <h4 class="contentcount">{{$rooms->maxperiod}}</h4>
                                             </div>
                                         </div>
@@ -240,7 +240,7 @@
                                 <div class="contentflex2div">
                                     <div class="buttondiv sm:rounded-lg">
                                         <img src="{{url('/storage/customimages/rupee.png')}}" class="rupeeimg">
-                                        <a class="amount">{{$rooms->rentperday}}/</a>
+                                        <a class="amount" id="maxamt">{{$rooms->rentperday}}/</a>
                                         <a class="amounttype">Per Day</a>
                                     </div>
                                     <div class="buttondiv1 sm:rounded-lg">
@@ -257,8 +257,14 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-guestroom-layout>
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    function functions(){
+        let maximumday = document.getElementById('')
+    }
+</script>
