@@ -3,7 +3,7 @@
         <x-nav-link href="{{ url('guestroom') }}" :active="request()->routeIs('guestroom')">
             {{ __('My Rental Rooms') }}
         </x-nav-link>
-        <x-nav-link href="/rental-room" :active="request()->routeIs('rental-room')">
+        <x-nav-link href="/rentalroom" :active="request()->routeIs('rentalroom')">
             {{ __('Rental Rooms') }}
         </x-nav-link>
     </x-slot>

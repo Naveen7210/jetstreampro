@@ -20,10 +20,11 @@ return new class extends Migration
             $table->string('district');
             $table->integer('housename');
             $table->integer('roomcount');
-            $table->integer('minperiod');
+            $table->integer('minday');
             $table->integer('maxperiod');
             $table->float('rentperday');
             $table->string('photos');
+            $table->integer('status');
             $table->timestamps();
         });
     }

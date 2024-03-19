@@ -12,12 +12,6 @@
         width: 20%;
     }
 
-    .filtermaindiv {
-        width: 100%;
-        padding: 2%;
-        background-color: white;
-    }
-
     .rentalroomviews {
         display: grid;
         width: 80%;
@@ -43,7 +37,7 @@
 
     .imageviews {
         border-radius: 10px;
-        width: 100%;
+        width: 50%;
     }
 
     .contentdiv {
@@ -135,7 +129,23 @@
         padding: 7% 0 0 0;
     }
 
+    #buttondiv2 {
+        display: none;
+        height: 7vh;
+        margin: 10% 0 0 0;
+        justify-content: center;
+        background-color: white;
+        box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+        padding: 7% 0 0 0;
+    }
+
     .amount {
+        font-size: 22px;
+        font-weight: 800;
+        padding: 0 0 0 10%;
+    }
+
+    .selectedamount {
         font-size: 22px;
         font-weight: 800;
         padding: 0 0 0 10%;
@@ -155,81 +165,12 @@
         font-weight: 800;
     }
 
-    .subfilterdiv {
-        width: 100%;
-        height: 7vh;
+    .selectedamount {
+        border: none;
     }
 
-    .formlabeldiv {
-        width: 100%;
-        padding: 2%;
-    }
-
-    .formfilterdiv {
-        width: 100%;
-        height: 7vh;
-        padding: 2%;
-    }
-
-    .subfilterformdiv {
-        width: 100%;
-        height: fit-content;
-    }
-
-    .filterheading {
-        font-size: 28px;
-        font-weight: 600;
-        text-align: left;
-        letter-spacing: 2px;
-        padding: 2.5% 1% 1% 2%;
-    }
-
-    .filterlabel {
-        width: 100%;
-    }
-
-    .filterinput {
-        width: 100%;
-    }
-
-
-    .filterbtn {
-        height: 7vh;
-        border-width: 2px;
-        font-size: 24px;
-        padding: 1% 10% 1% 10%;
-        margin: 5% 0 5% 25%;
-        font-weight: 700;
-    }
-
-    .alert-danger {
-        justify-self: center;
-        position: absolute;
-        z-index: 2;
-        animation-name: alert;
-        animation-duration: 10s;
-        animation-fill-mode: forwards;
-    }
-
-    @keyframes alert {
-        100% {
-            opacity: 0;
-        }
-
-        100% {
-            z-index: -1;
-        }
-    }
-
-    .housestatus{
-        position: absolute;
-        z-index: 2;
-        background-color: pink;
-        font-size: 16px;
-        font-weight: 700;
-        margin: 4% 0 0 0;
-        padding: 1% 6% 1% 3%;
-        border-radius: 0 20px 20px 0;
+    #afterchecktotal {
+        display: none;
     }
 </style>
 <x-guest-layout>
@@ -238,68 +179,18 @@
             <div class="overflow-hidden ">
                 <div class="rentalroommaindiv">
                     <div class="flexmaindiv">
-                        <div class="filtermaindiv sm:rounded-lg">
-                            <div class="subfilterdiv">
-                                <h2 class="filterheading">Filter House</h2>
-                            </div>
-                            <div class="subfilterformdiv">
-                                <form method="GET" action="{{url('amountfilter')}}">
-                                    @csrf
-                                    <div class="formlabeldiv">
-                                        <label class="filterlabel">Living Room Count</label>
-                                    </div>
-                                    <div class="formfilterdiv">
-                                        <input class="filterinput" name="minamount" placeholder="Minimum 3 room">
-                                    </div>
-                                    <!-- <div class="formlabeldiv">
-                                        <label class="filterlabel">Bed Room Count</label>
-                                    </div>
-                                    <div class="formfilterdiv">
-                                        <input class="filterinput" name="maxamount" placeholder="Minimum 3 room">
-                                    </div> -->
-                                    <div class="formlabeldiv">
-                                        <label class="filterlabel">Minimum Day</label>
-                                    </div>
-                                    <div class="formfilterdiv">
-                                        <input class="filterinput" name="minday" placeholder="Minimum 30 day">
-                                    </div>
-                                    <div class="formlabeldiv">
-                                        <label class="filterlabel">Maximum Day</label>
-                                    </div>
-                                    <div class="formfilterdiv">
-                                        <input class="filterinput" name="maxday" placeholder="Maximum 30 day">
-                                    </div>
-                                    <button type="submit" class="filterbtn">Filter</button>
-                                </form>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="rentalroomviews">
-                        @if(Session::has('alert'))
-                        <div class="alert alert-danger flex">
-                            <h1 class="alertsuccess">{{ session()->get('alert') }} </h1>
-                        </div>
-                        @endif
-                        @if(Session::has('success'))
-                        <div class="alert alert-danger flex">
-                            <h1 class="alertsuccess">{{ session()->get('success') }} </h1>
-                        </div>
-                        @endif
-                        @foreach($rooms as $rooms)
-                        @foreach($photorec as $photoc)
-                        @if($rooms->id == $photoc->user_id)
                         <div class="grouprentalroom sm:rounded-lg">
                             <div class="imagediv">
                                 <div class="mainimg">
-                                    @if($rooms->status==1)
-                                    <div class="housestatus">
-                                        <h2 class="housestatusname">Booked</h2>
-                                    </div>
-                                    @endif
+                                    @foreach($photoc as $photoc)
                                     <img src="{{$photoc->photos}}" class="imageviews">
+                                    @endforeach
                                 </div>
                                 <div class="name">
-                                    <h3 class="houename">{{$rooms->address}}</h3>
+                                    <h3 class="houename">{{$viewrooms->address}}</h3>
                                 </div>
                             </div>
                             <div class="contentdiv">
@@ -307,7 +198,7 @@
                                     <div class="flex1divcontent">
                                         <div class="fleximgcontent">
                                             <div class="image">
-                                                <img src="{{url('/storage/customimages/house.png')}}" class="imageicon">
+                                                <img src="" class="imageicon">
                                             </div>
                                             <div class="content">
                                                 <h4 class="contentname">Rental House</h4>
@@ -319,7 +210,7 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname">Living Room</h4>
-                                                <h4 class="contentcount">{{$rooms->roomcount}}</h4>
+                                                <h4 class="contentcount">{{$viewrooms->roomcount}}</h4>
                                             </div>
                                         </div>
                                         <div class="fleximgcontent">
@@ -328,7 +219,7 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname">Bed Room</h4>
-                                                <h4 class="contentcount">{{$rooms->roomcount}}</h4>
+                                                <h4 class="contentcount">{{$viewrooms->roomcount}}</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -339,7 +230,7 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname">Bath Room</h4>
-                                                <h4 class="contentcount">{{$rooms->roomcount}}</h4>
+                                                <h4 class="contentcount">{{$viewrooms->roomcount}}</h4>
                                             </div>
                                         </div>
                                         <div class="fleximgcontent">
@@ -348,7 +239,7 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname">Minimum Day</h4>
-                                                <h4 class="contentcount">{{$rooms->minday}}</h4>
+                                                <h4 class="contentcount" id="minrooms">{{$max = $viewrooms->minday}}</h4>
                                             </div>
                                         </div>
                                         <div class="fleximgcontent">
@@ -357,7 +248,13 @@
                                             </div>
                                             <div class="contentgrid">
                                                 <h4 class="contentname" id="maxday">Maximum Day</h4>
-                                                <h4 class="contentcount">{{$rooms->maxperiod}}</h4>
+                                                <h4 class="contentcount" id="maxrooms">{{$viewrooms->maxperiod}}</h4>
+                                            </div>
+                                        </div>
+                                        <div class="fleximgcontent">
+                                            <div class="contentgrid">
+                                                <h4 class="contentname" id="maxday">Number of day</h4>
+                                                <input name="countofdays" type="number" id="countofdays">
                                             </div>
                                         </div>
 
@@ -366,22 +263,20 @@
                                 <div class="contentflex2div">
                                     <div class="buttondiv sm:rounded-lg">
                                         <img src="{{url('/storage/customimages/rupee.png')}}" class="rupeeimg">
-                                        <h4 class="amount" id="maxamt"><span hidden>{{$day = $rooms->rentperday}}</span>{{30 * $day}}</h4>
-                                        <!-- <a class="amounttype">Per M</a> -->
+                                        <h4 class="amount" id="maxamt">{{$viewrooms->rentperday}}</h4>
+                                        <a class="amounttype">/Per Day</a>
+                                    </div>
+                                    <div class="buttondiv2 sm:rounded-lg" id="buttondiv2">
+                                        <h4 class="selectedamount">Total</h4>
+                                        <h4 class="selectedamount" id="selectedamount"></h4>
                                     </div>
                                     <div class="buttondiv1 sm:rounded-lg">
-                                        @if(empty(auth()->user()->name))
-                                        <a href="{{url('checkuser')}}" class="viewdiv">View Details</a>
-                                        @elseif(!(empty(auth()->user()->name)))
-                                        <a href="{{url('checkusers/'.$rooms->id)}}" class="viewdiv">View Details</a>
-                                        @endif
+                                        <a id="checktotal" href="" class="viewdiv">Book</a>
+                                        <a id="afterchecktotal" href="{{url('bookroom/'.$viewrooms->id)}}" class="viewdiv">Book</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @endif
-                        @endforeach
-                        @endforeach
                     </div>
                 </div>
             </div>
@@ -397,4 +292,55 @@
     function functions() {
         let maximumday = document.getElementById('')
     }
+
+    let countdays = document.getElementById('countofdays');
+    let dayamt = document.getElementById('maxamt');
+    let maxroom = document.getElementById('maxrooms');
+    let minroom = document.getElementById('minrooms');
+    let valueis = document.getElementById('selectedamount');
+    let change = document.getElementById('checktotal');
+    let check = valueis.textContent
+
+    if (check == '') {
+        document.getElementById('countofdays').focus();
+    }
+
+    countdays.onchange = function() {
+        let counts = this.value;
+        let maxcount = maxroom.textContent;
+        let mincount = minroom.textContent;
+        console.log(check)
+        if (check != 's') {
+            if (counts >= mincount) {
+                if (counts <= maxcount) {
+                    let dayamount = dayamt.textContent;
+                    let totalamount = counts * dayamount;
+
+                    document.getElementById('selectedamount').textContent = totalamount;
+                    document.getElementById('buttondiv2').style.display = 'flex';
+                    document.getElementById('checktotal').style.display = 'none';
+                    document.getElementById('afterchecktotal').style.display = 'block';
+                } else {
+                    document.getElementById('buttondiv2').style.display = 'none';
+                }
+            } else {
+                document.getElementById('buttondiv2').style.display = 'none';
+            }
+        }
+    }
+
+
+
+    // valueis.onchange = function() {
+
+    //     let check = valueis.textContent
+    //     console.log(check)
+    //     if (check == '') {
+    //         document.getElementById('countofdays').focus();
+    //     } else {
+    //         document.getElementById('checktotal').style.display = 'none';
+    //         document.getElementById('afterchecktotal').style.display = 'block';
+    //     }
+
+    // }
 </script>

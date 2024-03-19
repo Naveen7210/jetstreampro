@@ -17,9 +17,10 @@ class guestrooms extends Model
         'mobileno',
         'housename',
         'roomcount',
-        'minperiod',
+        'minday',
         'maxperiod',
         'rentperday',
         'photos',
+        'status',
     ];
 }

@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\GuestroomsController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UsertypeController;
+use App\Http\Controllers\FilterController;
+use App\Http\Controllers\RoombookingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +18,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('rental-room.rental-room');
+// });
+
+Route::get('/', [GuestroomsController::class, 'viewrentalroom']);
 
 Route::middleware([
     'auth:sanctum',
@@ -25,12 +30,20 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('dashboard');   
     })->name('dashboard');
+
+    Route::get('/checkusers/{id?}', [RoomController::class, 'view_details']);
 }); 
 
 Route::resource('/houseowner', UsertypeController::class);
     
 Route::resource('/guestroom', GuestroomsController::class);
 
-Route::get('/rental-room', [GuestroomsController::class, 'viewrentalroom']);
+Route::get('/rentalroom', [GuestroomsController::class, 'viewrentalroom']);
+
+Route::get('/checkuser', [RoomController::class, 'checkusers']);
+
+Route::get('/amountfilter', [FilterController::class, 'amountfilters']);
+
+Route::get('/bookroom/{id?}', [RoombookingController::class,'bookrooms']);

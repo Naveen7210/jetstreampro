@@ -1,25 +1,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<style>
-    .rentalroomviews{
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        column-gap: 20px;
-        row-gap: 10px;
-    }
 
-    .grouprentalroom{
-        padding: 5%;
-        border-radius: 10px;
-        background-color:tan;
-    }
-
-    .imageviews{
-        border-radius: 10px;
-        width: 100%;
-    }
-</style>
 <x-app-layout>
     <x-slot name="header">
         <x-nav-link href="{{ route('guestroom.create') }}" :active="request()->routeIs('guestroom.create')">
@@ -60,7 +42,7 @@
                             <td hidden>{{$guest->address}}</td>
                             <td>{{$guest->housename}}</td>
                             <td hidden>{{$guest->roomcount}}</td>
-                            <td>{{$guest->minperiod}}</td>
+                            <td>{{$guest->minday}}</td>
                             <td>{{$guest->maxperiod}}</td>
                             <td>{{$guest->rentperday}}</td>
                             <td hidden style="display: flex; width:fit-content; gap: 8px">@foreach($roomphotos as $roomphoto)

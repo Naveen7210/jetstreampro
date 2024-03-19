@@ -124,7 +124,7 @@
                         <div class="detailflex2view">
                             <h5 class="viewvalue">{{$guestroomview->address}}</h5>
                             <h5 class="viewvalue">{{$guestroomview->roomcount}}</h5>
-                            <h5 class="viewvalue">{{$guestroomview->minperiod}}</h5>
+                            <h5 class="viewvalue">{{$guestroomview->minday}}</h5>
                             <h5 class="viewvalue">{{$guestroomview->maxperiod}}</h5>
                             <h5 class="viewvalue">{{$guestroomview->rentperday}}</h5>
                             <h5 class="viewvalue1">

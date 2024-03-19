@@ -35,8 +35,8 @@
                         </div>
 
                         <div>
-                            <x-label for="minperiod" value="{{ __('Minimum Booking Period') }}" />
-                            <x-input id="minperiod" class="block mt-1 w-full" type="number" name="minperiod" :value="old('minperiod')" required autofocus autocomplete="name" />
+                            <x-label for="minday" value="{{ __('Minimum Booking Period') }}" />
+                            <x-input id="minday" class="block mt-1 w-full" type="number" name="minday" :value="old('minday')" required autofocus autocomplete="name" />
                         </div>
 
                         <div>

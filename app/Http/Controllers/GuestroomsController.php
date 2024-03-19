@@ -46,7 +46,7 @@ class GuestroomsController extends Controller
             'maxperiod' => ['required'],
             'rentperday' => ['required'],
         ]);
-
+        
         $photoid = guestrooms::orderBy('id', 'DESC')->pluck('id')->first();
         $photosid = $photoid +  1;
         foreach ($request->file('photos') as $photo) {
@@ -161,6 +161,6 @@ class GuestroomsController extends Controller
             $o++;
         }
 
-        return view('rental-room.rental-room')->with('rooms', $rooms)->with('photorec', $photorec);;
+        return view('rental-room.rental-room')->with('rooms', $rooms)->with('photorec', $photorec);
     }
 }
