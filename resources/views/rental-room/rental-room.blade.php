@@ -202,6 +202,15 @@
         font-weight: 700;
     }
 
+    .alert-success {
+        justify-self: center;
+        position: absolute;
+        z-index: 2;
+        animation-name: success;
+        animation-duration: 10s;
+        animation-fill-mode: forwards;
+    }
+
     .alert-danger {
         justify-self: center;
         position: absolute;
@@ -209,6 +218,16 @@
         animation-name: alert;
         animation-duration: 10s;
         animation-fill-mode: forwards;
+    }
+
+    @keyframes success {
+        100% {
+            opacity: 0;
+        }
+
+        100% {
+            z-index: -1;
+        }
     }
 
     @keyframes alert {
@@ -221,7 +240,7 @@
         }
     }
 
-    .housestatus{
+    .housestatus {
         position: absolute;
         z-index: 2;
         background-color: pink;
@@ -230,6 +249,22 @@
         margin: 4% 0 0 0;
         padding: 1% 6% 1% 3%;
         border-radius: 0 20px 20px 0;
+    }
+
+    .alltypefilter {
+        display: none;
+    }
+
+    .livingroomfilter {
+        display: none;
+    }
+
+    .minroomfilter {
+        display: none;
+    }
+
+    .maxroomfilter {
+        display: none;
     }
 </style>
 <x-guest-layout>
@@ -243,31 +278,66 @@
                                 <h2 class="filterheading">Filter House</h2>
                             </div>
                             <div class="subfilterformdiv">
-                                <form method="GET" action="{{url('amountfilter')}}">
+                                <form method="GET" action="{{url('alltypefilter')}}">
                                     @csrf
-                                    <div class="formlabeldiv">
-                                        <label class="filterlabel">Living Room Count</label>
-                                    </div>
                                     <div class="formfilterdiv">
-                                        <input class="filterinput" name="minamount" placeholder="Minimum 3 room">
+                                        <select class="filterinput" name="typeoffilter" id="typeoffilter">
+                                            <option value="">Select Filter Type</option>
+                                            <option value="allfilter">All Filters</option>
+                                            <option value="livingroom">Living Room</option>
+                                            <option value="minroomcount">Minimum Day</option>
+                                            <option value="maxroomcount">Maximum Day</option>
+                                        </select>
                                     </div>
-                                    <!-- <div class="formlabeldiv">
+                                    <div class="alltypefilter" id="alltypefilter">
+                                        <div class="formlabeldiv">
+                                            <label class="filterlabel">Living Room Count</label>
+                                        </div>
+                                        <div class="formfilterdiv">
+                                            <input class="filterinput" name="minamount" placeholder="Minimum 3 room">
+                                        </div>
+                                        <!-- <div class="formlabeldiv">
                                         <label class="filterlabel">Bed Room Count</label>
                                     </div>
                                     <div class="formfilterdiv">
                                         <input class="filterinput" name="maxamount" placeholder="Minimum 3 room">
                                     </div> -->
-                                    <div class="formlabeldiv">
-                                        <label class="filterlabel">Minimum Day</label>
+                                        <div class="formlabeldiv">
+                                            <label class="filterlabel">Minimum Day</label>
+                                        </div>
+                                        <div class="formfilterdiv">
+                                            <input class="filterinput" name="minday" placeholder="Minimum 30 day">
+                                        </div>
+                                        <div class="formlabeldiv">
+                                            <label class="filterlabel">Maximum Day</label>
+                                        </div>
+                                        <div class="formfilterdiv">
+                                            <input class="filterinput" name="maxday" placeholder="Maximum 30 day">
+                                        </div>
                                     </div>
-                                    <div class="formfilterdiv">
-                                        <input class="filterinput" name="minday" placeholder="Minimum 30 day">
+                                    <div class="livingroomfilter" id="livingroomfilter">
+                                        <div class="formlabeldiv">
+                                            <label class="filterlabel">Living Room Count</label>
+                                        </div>
+                                        <div class="formfilterdiv">
+                                            <input class="filterinput" name="minamount1" placeholder="Minimum 3 room">
+                                        </div>
                                     </div>
-                                    <div class="formlabeldiv">
-                                        <label class="filterlabel">Maximum Day</label>
+                                    <div class="minroomfilter" id="minroomfilter">
+                                        <div class="formlabeldiv">
+                                            <label class="filterlabel">Minimum Day</label>
+                                        </div>
+                                        <div class="formfilterdiv">
+                                            <input class="filterinput" name="minday1" placeholder="Minimum 30 day">
+                                        </div>
                                     </div>
-                                    <div class="formfilterdiv">
-                                        <input class="filterinput" name="maxday" placeholder="Maximum 30 day">
+                                    <div class="maxroomfilter" id="maxroomfilter">
+                                        <div class="formlabeldiv">
+                                            <label class="filterlabel">Maximum Day</label>
+                                        </div>
+                                        <div class="formfilterdiv">
+                                            <input class="filterinput" name="maxday1" placeholder="Maximum 30 day">
+                                        </div>
                                     </div>
                                     <button type="submit" class="filterbtn">Filter</button>
                                 </form>
@@ -281,7 +351,7 @@
                         </div>
                         @endif
                         @if(Session::has('success'))
-                        <div class="alert alert-danger flex">
+                        <div class="alert alert-success flex">
                             <h1 class="alertsuccess">{{ session()->get('success') }} </h1>
                         </div>
                         @endif
@@ -396,5 +466,33 @@
 <script>
     function functions() {
         let maximumday = document.getElementById('')
+    }
+
+    let selectfield = document.getElementById('typeoffilter');
+    selectfield.onchange = function() {
+        let selectvalue = this.value
+        console.log(selectvalue)
+
+        if (selectvalue == 'allfilter') {
+            document.getElementById('alltypefilter').style.display = 'block';
+            document.getElementById('livingroomfilter').style.display = 'none';
+            document.getElementById('minroomfilter').style.display = 'none';
+            document.getElementById('maxroomfilter').style.display = 'none';
+        }else if(selectvalue == 'livingroom'){
+            document.getElementById('alltypefilter').style.display = 'none';
+            document.getElementById('livingroomfilter').style.display = 'block';
+            document.getElementById('minroomfilter').style.display = 'none';
+            document.getElementById('maxroomfilter').style.display = 'none';
+        }else if(selectvalue == 'minroomcount'){
+            document.getElementById('alltypefilter').style.display = 'none';
+            document.getElementById('livingroomfilter').style.display = 'none';
+            document.getElementById('minroomfilter').style.display = 'block';
+            document.getElementById('maxroomfilter').style.display = 'none';
+        }else if(selectvalue == 'maxroomcount'){
+            document.getElementById('alltypefilter').style.display = 'none';
+            document.getElementById('livingroomfilter').style.display = 'none';
+            document.getElementById('minroomfilter').style.display = 'none';
+            document.getElementById('maxroomfilter').style.display = 'block';
+        }
     }
 </script>

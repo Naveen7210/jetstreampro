@@ -148,7 +148,7 @@
     .selectedamount {
         font-size: 22px;
         font-weight: 800;
-        padding: 0 0 0 10%;
+        padding: 0 0 0 60%;
     }
 
     .amounttype {
@@ -167,10 +167,60 @@
 
     .selectedamount {
         border: none;
+        background-color: transparent;
     }
 
     #afterchecktotal {
         display: none;
+    }
+
+    .alert-success {
+        justify-self: center;
+        position: absolute;
+        z-index: 2;
+        animation-name: success;
+        animation-duration: 10s;
+        animation-fill-mode: forwards;
+    }
+
+    .alert-danger {
+        display: none;
+        justify-self: center;
+        position: absolute;
+        z-index: 2;
+        animation-name: alert;
+        animation-duration: 10s;
+        animation-fill-mode: forwards;
+    }
+
+    #alert-danger {
+        display: none;
+        justify-self: center;
+        position: absolute;
+        z-index: 2;
+        animation-name: alert;
+        animation-duration: 10s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes success {
+        100% {
+            opacity: 0;
+        }
+
+        100% {
+            z-index: -1;
+        }
+    }
+
+    @keyframes alert {
+        100% {
+            opacity: 0;
+        }
+
+        100% {
+            z-index: -1;
+        }
     }
 </style>
 <x-guest-layout>
@@ -182,6 +232,9 @@
 
                     </div>
                     <div class="rentalroomviews">
+                        <div class="alert alert-danger flex" id="alert-danger">
+                            <h1 class="alertsuccess" id="alertsuccess"></h1>
+                        </div>
                         <div class="grouprentalroom sm:rounded-lg">
                             <div class="imagediv">
                                 <div class="mainimg">
@@ -261,19 +314,21 @@
                                     </div>
                                 </div>
                                 <div class="contentflex2div">
+                                    <form method="get" action="{{url('bookroom/'.$viewrooms->id)}}" >
+                                        @csrf
                                     <div class="buttondiv sm:rounded-lg">
                                         <img src="{{url('/storage/customimages/rupee.png')}}" class="rupeeimg">
                                         <h4 class="amount" id="maxamt">{{$viewrooms->rentperday}}</h4>
                                         <a class="amounttype">/Per Day</a>
                                     </div>
                                     <div class="buttondiv2 sm:rounded-lg" id="buttondiv2">
-                                        <h4 class="selectedamount">Total</h4>
-                                        <h4 class="selectedamount" id="selectedamount"></h4>
+                                        <input class="selectedamount" name="selectedamount" id="selectedamount">
                                     </div>
                                     <div class="buttondiv1 sm:rounded-lg">
                                         <a id="checktotal" href="" class="viewdiv">Book</a>
-                                        <a id="afterchecktotal" href="{{url('bookroom/'.$viewrooms->id)}}" class="viewdiv">Book</a>
+                                        <button id="afterchecktotal" class="viewdiv" name="submit">Book</button>
                                     </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -299,7 +354,7 @@
     let minroom = document.getElementById('minrooms');
     let valueis = document.getElementById('selectedamount');
     let change = document.getElementById('checktotal');
-    let check = valueis.textContent
+    let check = Number(valueis.textContent)
 
     if (check == '') {
         document.getElementById('countofdays').focus();
@@ -307,24 +362,28 @@
 
     countdays.onchange = function() {
         let counts = this.value;
-        let maxcount = maxroom.textContent;
-        let mincount = minroom.textContent;
-        console.log(check)
+        let maxcount = Number(maxroom.textContent);
+        let mincount = Number(minroom.textContent);
         if (check != 's') {
             if (counts >= mincount) {
                 if (counts <= maxcount) {
-                    let dayamount = dayamt.textContent;
+                    let dayamount = Number(dayamt.textContent);
                     let totalamount = counts * dayamount;
 
-                    document.getElementById('selectedamount').textContent = totalamount;
+                    document.getElementById('selectedamount').value = totalamount;
                     document.getElementById('buttondiv2').style.display = 'flex';
                     document.getElementById('checktotal').style.display = 'none';
                     document.getElementById('afterchecktotal').style.display = 'block';
+                    document.getElementById('alert-danger').style.display = 'none';
                 } else {
                     document.getElementById('buttondiv2').style.display = 'none';
+                    document.getElementById('alert-danger').style.display = 'block';
+                    document.getElementById('alertsuccess').textContent = "Maximum day should be less then" + " " + maxcount + " " + "days";
                 }
             } else {
                 document.getElementById('buttondiv2').style.display = 'none';
+                document.getElementById('alert-danger').style.display = 'block';
+                document.getElementById('alertsuccess').textContent = "Minimum day should be greater then" + " " + mincount + " " + "days";
             }
         }
     }

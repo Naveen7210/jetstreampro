@@ -44,6 +44,6 @@ Route::get('/rentalroom', [GuestroomsController::class, 'viewrentalroom']);
 
 Route::get('/checkuser', [RoomController::class, 'checkusers']);
 
-Route::get('/amountfilter', [FilterController::class, 'amountfilters']);
+Route::get('/alltypefilter', [FilterController::class, 'alltypefilters']);
 
 Route::get('/bookroom/{id?}', [RoombookingController::class,'bookrooms']);
