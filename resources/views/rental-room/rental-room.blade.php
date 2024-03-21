@@ -278,7 +278,7 @@
                                 <h2 class="filterheading">Filter House</h2>
                             </div>
                             <div class="subfilterformdiv">
-                                <form method="GET" action="{{url('alltypefilter')}}">
+                                <form method="post" action="{{url('alltypefilter')}}">
                                     @csrf
                                     <div class="formfilterdiv">
                                         <select class="filterinput" name="typeoffilter" id="typeoffilter">
@@ -306,13 +306,13 @@
                                             <label class="filterlabel">Minimum Day</label>
                                         </div>
                                         <div class="formfilterdiv">
-                                            <input class="filterinput" name="minday" placeholder="Minimum 30 day">
+                                            <input class="filterinput" name="minday" placeholder="Minimum day">
                                         </div>
                                         <div class="formlabeldiv">
                                             <label class="filterlabel">Maximum Day</label>
                                         </div>
                                         <div class="formfilterdiv">
-                                            <input class="filterinput" name="maxday" placeholder="Maximum 30 day">
+                                            <input class="filterinput" name="maxday" placeholder="Maximum day">
                                         </div>
                                     </div>
                                     <div class="livingroomfilter" id="livingroomfilter">
@@ -328,7 +328,7 @@
                                             <label class="filterlabel">Minimum Day</label>
                                         </div>
                                         <div class="formfilterdiv">
-                                            <input class="filterinput" name="minday1" placeholder="Minimum 30 day">
+                                            <input class="filterinput" name="minday1" placeholder="Minimum day">
                                         </div>
                                     </div>
                                     <div class="maxroomfilter" id="maxroomfilter">
@@ -336,7 +336,7 @@
                                             <label class="filterlabel">Maximum Day</label>
                                         </div>
                                         <div class="formfilterdiv">
-                                            <input class="filterinput" name="maxday1" placeholder="Maximum 30 day">
+                                            <input class="filterinput" name="maxday1" placeholder="Maximum day">
                                         </div>
                                     </div>
                                     <button type="submit" class="filterbtn">Filter</button>

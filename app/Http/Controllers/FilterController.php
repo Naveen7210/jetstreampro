@@ -23,25 +23,18 @@ class FilterController extends Controller
             $maxdays = $request->maxday;
 
 
-            $roomid = guestrooms::where('roomcount', '=', $minimum)->pluck('id');
-            $livingvalue = guestrooms::where('roomcount', '=', $minimum)->pluck('roomcount');
-            $mindayvalue = guestrooms::where('minday', '<=', $mindays)->pluck('minday');
-            $maxdayvalue = guestrooms::where('maxperiod', '>=', $maxdays)->pluck('maxperiod');
-
-            $photorec1 = [];
-            if (!(empty($roomid))) {
-                for ($i = 0; $i < count($roomid); $i++) {
-                    if (roomphotos::where('user_id', $roomid[$i])->exists()) {
-                        $photorec1[] = roomphotos::where('user_id', '=', $roomid[$i])->first();
-                    }
-                }
-            }
+            $roomid = guestrooms::where('roomcount', '=', $minimum)->get();
 
             $rooms1 = [];
-            for ($i = 0; $i < count($livingvalue); $i++) {
-                for ($j = 0; $j < count($mindayvalue); $j++) {
-                    for ($k = 0; $k < count($maxdayvalue); $k++) {
-                        $rooms1 = guestrooms::where('roomcount', '=', $livingvalue[$i])->where('minday', '>=', $mindayvalue[$j])->where('maxperiod', '>=', $maxdayvalue[$k])->get();
+            for($i=0;$i<count($roomid);$i++){
+                $rooms1 = guestrooms::where('roomcount', '=', $roomid[$i]->roomcount)->where('minday', '<=', $roomid[$i]->minday)->where('maxperiod', '>=', $roomid[$i]->maxperiod)->get();
+            }
+            
+            $photorec1 = [];
+            if (!(empty($rooms1))) {
+                for ($i = 0; $i < count($rooms1); $i++) {
+                    if (roomphotos::where('user_id', $rooms1[$i]->id)->exists()) {
+                        $photorec1[] = roomphotos::where('user_id', '=', $rooms1[$i]->id)->first();
                     }
                 }
             }
@@ -67,7 +60,7 @@ class FilterController extends Controller
             }
         } elseif ($types == 'livingroom') {
 
-            $request->validate([
+            $request->validate([    
                 'minamount1' => ['required'],
             ]);
 
@@ -76,18 +69,18 @@ class FilterController extends Controller
             $roomid = guestrooms::where('roomcount', '=', $minimum)->pluck('id');
             $livingvalue = guestrooms::where('roomcount', '=', $minimum)->pluck('roomcount');
 
-            $photorec1 = [];
-            if (!(empty($roomid))) {
-                for ($i = 0; $i < count($roomid); $i++) {
-                    if (roomphotos::where('user_id', $roomid[$i])->exists()) {
-                        $photorec1[] = roomphotos::where('user_id', '=', $roomid[$i])->first();
-                    }
-                }
-            }
-
             $rooms1 = [];
             for ($i = 0; $i < count($livingvalue); $i++) {
                 $rooms1 = guestrooms::where('roomcount', '=', $livingvalue[$i])->get();
+            }
+            
+            $photorec1 = [];
+            if (!(empty($rooms1))) {
+                for ($i = 0; $i < count($rooms1); $i++) {
+                    if (roomphotos::where('user_id', $rooms1[$i]->id)->exists()) {
+                        $photorec1[] = roomphotos::where('user_id', '=', $rooms1[$i]->id)->first();
+                    }
+                }
             }
             
             $rooms = [];
@@ -117,20 +110,20 @@ class FilterController extends Controller
 
             $mindays = $request->minday1;
 
-            $mindayvalue = guestrooms::where('minday', '<=', $mindays)->pluck('minday');
+            $roomid = guestrooms::where('minday', '<=', $mindays)->where('maxperiod', '>=', $mindays)->get();
 
             $photorec1 = [];
             if (!(empty($roomid))) {
                 for ($i = 0; $i < count($roomid); $i++) {
-                    if (roomphotos::where('user_id', $roomid[$i])->exists()) {
-                        $photorec1[] = roomphotos::where('user_id', '=', $roomid[$i])->first();
+                    if (roomphotos::where('user_id', $roomid[$i]->id)->exists()) {
+                        $photorec1[] = roomphotos::where('user_id', '=', $roomid[$i]->id)->first();
                     }
                 }
             }
 
             $rooms1 = [];
-            for ($j = 0; $j < count($mindayvalue); $j++) {
-                $rooms1 = guestrooms::where('minday', '>=', $mindayvalue[$j])->get();
+            for ($j = 0; $j < count($roomid); $j++) {
+                $rooms1 = guestrooms::where('minday', '<=', $roomid[$j]->minday)->where('maxperiod', '>=', $roomid[$j]->maxperiod)->get();
             }
 
             $rooms = [];
@@ -155,26 +148,29 @@ class FilterController extends Controller
         } elseif ($types == 'maxroomcount') {
 
             $request->validate([
-                'maxday2' => ['required'],
+                'maxday1' => ['required'],
             ]);
-            $maxdays = $request->maxday2;
+            $maxdays = $request->maxday1;
 
-            $maxdayvalue = guestrooms::where('maxperiod', '>=', $maxdays)->pluck('maxperiod');
+            $roomid = guestrooms::where('minday', '<=', $maxdays)->where('maxperiod', '>=', $maxdays)->get();
+
+            //return $roomid;
 
             $photorec1 = [];
             if (!(empty($roomid))) {
                 for ($i = 0; $i < count($roomid); $i++) {
-                    if (roomphotos::where('user_id', $roomid[$i])->exists()) {
-                        $photorec1[] = roomphotos::where('user_id', '=', $roomid[$i])->first();
+                    if (roomphotos::where('user_id', $roomid[$i]->id)->exists()) {
+                        $photorec1[] = roomphotos::where('user_id', '=', $roomid[$i]->id)->first();
                     }
                 }
             }
+            //return $photorec1;
 
             $rooms1 = [];
-            for ($k = 0; $k < count($maxdayvalue); $k++) {
-                $rooms1 = guestrooms::where('maxperiod', '>=', $maxdayvalue[$k])->get();
+            for ($k = 0; $k < count($roomid); $k++) {
+                $rooms1 = guestrooms::where('maxperiod', '>=', $roomid[$k]->maxperiod)->where('minday', '>=', $roomid[$k]->minday)->get();
             }
-
+            //return $rooms1;
             $rooms = [];
             for ($i = 0; $i < count($rooms1); $i++) {
                 $checkstatus = $rooms1[$i]->status;
@@ -182,7 +178,7 @@ class FilterController extends Controller
                     $rooms [] = $rooms1[$i];
                 }
             }
-
+            //return $rooms;
             if(empty($rooms)){
                 $message = "House is already booked";
                 return redirect('/')->with('alert', $message);
@@ -191,7 +187,7 @@ class FilterController extends Controller
             if (!(empty($photorec1) || (empty($rooms)))) {
                 return view('rental-room.rental-room')->with('rooms', $rooms)->with('photorec', $photorec1);
             } else {
-                $message = "Sorry No house is available with" . " " . $maxdayvalue . " " . "Maximum day, if its available we will contact you";
+                $message = "Sorry No house is available with" . " " . $maxdays . " " . "Maximum day, if its available we will contact you";
                 return redirect('/')->with('alert', $message);
             }
         }
