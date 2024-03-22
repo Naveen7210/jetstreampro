@@ -14,7 +14,7 @@ class GuestroomsController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {   
         $guestrooms = guestrooms::get();
         $roomphotos = roomphotos::get();
         return view('guestroom.guestroom')->with('guestrooms', $guestrooms)->with('roomphotos', $roomphotos);
@@ -161,6 +161,10 @@ class GuestroomsController extends Controller
             $o++;
         }
 
-        return view('rental-room.rental-room')->with('rooms', $rooms)->with('photorec', $photorec);
+        if(auth()->user()->user_type == 0){
+            return view('rental-room.rental-room')->with('rooms', $rooms)->with('photorec', $photorec);
+        }elseif(auth()->user()->user_type == 1){
+            return view('rental-room.rental-room1')->with('rooms', $rooms)->with('photorec', $photorec);
+        }
     }
 }

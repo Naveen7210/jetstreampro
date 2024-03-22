@@ -17,11 +17,9 @@ class FilterController extends Controller
 
         if ($types == 'allfilter') {
 
-
             $minimum = $request->minamount;
             $mindays = $request->minday;
             $maxdays = $request->maxday;
-
 
             $roomid = guestrooms::where('roomcount', '=', $minimum)->get();
 
